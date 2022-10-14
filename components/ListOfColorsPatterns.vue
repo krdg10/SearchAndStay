@@ -1,9 +1,11 @@
 <template>
     <b-container>
         <ModalForm title="Create New Calendar Pattern" :submit="onCreateColors" ref="formModalCreate"></ModalForm>
-        <ModalForm title="update" :submit="onUpdateColors" ref="formModalUpdate" :colorPattern="colorPattern">
+        <ModalForm title="Update Calendar Pattern" :submit="onUpdateColors" ref="formModalUpdate"
+            :colorPattern="colorPattern">
         </ModalForm>
         <ModalMessage :message="message" ref="modalMessage"></ModalMessage>
+        <ModalMessage :message="message" :deleteFunction="onDeletePattern" ref="modalDelete"></ModalMessage>
         <b-row>
             <b-col cols="4" v-for="colorPattern in listOfPatterns" :value="colorPattern.id" :key="colorPattern.id">
                 <b-card style="max-width: 20rem;" v-bind:style="{ 'background-color': colorPattern.bg_color}">
@@ -14,8 +16,9 @@
                             v-bind:style="{ 'color': colorPattern.text_color}">Text Color: {{colorPattern.text_color}}</pre>
                         <b-button @click="showModalUpdate(colorPattern)">Edit</b-button>
                         <NuxtLink :to="{ name: 'patterns-id', params: { id: colorPattern.id }}">
-                            <b-button>Show</b-button>
+                            <b-button variant="primary">Show</b-button>
                         </NuxtLink>
+                        <b-button variant="danger" @click="showModalDelete(colorPattern)">Delete</b-button>
                     </b-card-text>
                 </b-card>
             </b-col>
@@ -98,10 +101,43 @@ export default {
             this.$refs.formModalUpdate.show = !this.$refs.formModalUpdate.show;
         },
 
+        showModalDelete(colorPattern) {
+            this.colorPattern = colorPattern;
+            this.message = 'Are you sure you want to delete the selected calendar pattern?'
+            this.$refs.modalDelete.show = !this.$refs.modalDelete.show;
+
+        },
+
         async loadListOfPatterns() {
             this.listOfPatterns = await this.$axios.$get("calendar_patterns", { headers: { Authorization: "Bearer " + this.$store.state.token.access_token } });
             this.listOfPatterns = this.listOfPatterns.data.entities;
-        }
+        },
+
+        async onDeletePattern(event) {
+            event.preventDefault();
+            let config = {
+                method: "DELETE",
+                url: "https://sys-dev.searchandstay.com/api/admin/calendar_patterns/" + this.colorPattern.id,
+                headers: {
+                    "Authorization": "Bearer " + this.$store.state.token.access_token,
+                    "Content-Type": "text/plain"
+                },
+            };
+            try {
+                await this.$axios(config).then(async response => {
+                    this.$refs.modalDelete.show = !this.$refs.modalDelete.show;
+                    await this.loadListOfPatterns();
+                    this.message = response.data.message;
+                    this.$refs.modalMessage.show = !this.$refs.modalMessage.show;
+                });
+            }
+            catch (e) {
+                if (e.message == 'Request failed with status code 409') {
+                    this.$store.commit('setToken', {});
+                    this.$store.commit('changeIsLoggedIn');
+                }
+            }
+        },
     },
 
     async mounted() {

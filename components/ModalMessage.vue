@@ -2,7 +2,10 @@
     <b-modal v-model="show" id="modalMessage">
         <p class="my-4">{{message}}</p>
         <template #modal-footer>
-            <div></div>
+            <div class="w-100" v-if="deleteFunction != null">
+                <b-button type="submit" variant="danger" size="sm" class="float-center" @click="deleteFunction">
+                    Delete</b-button>
+            </div>
         </template>
     </b-modal>
 </template>
@@ -14,7 +17,7 @@ export default {
             show: false
         }
     },
-    props: ['message'],
+    props: ['message', 'deleteFunction'],
 
 }
 </script>

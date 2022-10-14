@@ -33,8 +33,6 @@ export default {
     methods: {
         async onSubmit(event) {
             let login = '{"login": {"email": "' + this.form.email + '","password": "' + this.form.password + '"}}';
-            //  login = JSON.stringify({ login: { email: this.email, password: this.password } });
-            console.log(login)
             event.preventDefault();
             try {
                 this.invalidSign = false;
