@@ -53,7 +53,10 @@ export default {
                 });
             }
             catch (e) {
-                console.log(e);
+                if (e.message == 'Request failed with status code 409') {
+                    this.$store.commit('setToken', {});
+                    this.$store.commit('changeIsLoggedIn');
+                }
             }
         },
 
@@ -78,7 +81,10 @@ export default {
                 });
             }
             catch (e) {
-                console.log(e);
+                if (e.message == 'Request failed with status code 409') {
+                    this.$store.commit('setToken', {});
+                    this.$store.commit('changeIsLoggedIn');
+                }
             }
         },
 
