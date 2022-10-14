@@ -12,6 +12,7 @@
                     required>
                 </b-form-input>
             </b-form-group>
+            <b-alert show variant="danger" v-if="loginFailed">Login failed. Please verify your credentials.</b-alert>
             <b-button type="submit" variant="primary" @click="onSubmit">Submit</b-button>
         </b-form>
     </b-container>
@@ -26,6 +27,7 @@ export default {
                 email: '',
                 password: ''
             },
+            loginFailed: false
 
         }
     },
@@ -40,11 +42,14 @@ export default {
                     .$post("login_json", login)
                     .then(res => {
                         if (res.success) {
+                            this.loginFailed = false;
                             this.$store.commit('setToken', res.data.result);
                             this.$store.commit('changeIsLoggedIn');
                         }
                     });
             } catch (e) {
+                this.loginFailed = true;
+
             }
         },
     }
