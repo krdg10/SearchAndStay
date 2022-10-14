@@ -13,6 +13,9 @@
                         <pre
                             v-bind:style="{ 'color': colorPattern.text_color}">Text Color: {{colorPattern.text_color}}</pre>
                         <b-button @click="showModalUpdate(colorPattern)">Edit</b-button>
+                        <NuxtLink :to="{ name: 'patterns-id', params: { id: colorPattern.id }}">
+                            <b-button>Show</b-button>
+                        </NuxtLink>
                     </b-card-text>
                 </b-card>
             </b-col>
@@ -73,7 +76,7 @@ export default {
                 data: data
             };
             try {
-                await this.$axios(config).then(async response => {
+                await this.$axios(config).then(async () => {
                     this.$refs.formModalUpdate.show = !this.$refs.formModalUpdate.show;
                     await this.loadListOfPatterns();
                     this.message = 'Calendar Pattern Updated Successfully';
