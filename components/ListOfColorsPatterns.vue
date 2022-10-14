@@ -1,14 +1,14 @@
 <template>
     <b-container>
-        <ModalForm title="Create New Calendar Pattern" :submit="onCreateColors" ref="formModalCreate"></ModalForm>
+        <h5 class="text-center mb-3">List of Calendars Patterns</h5>
         <ModalForm title="Update Calendar Pattern" :submit="onUpdateColors" ref="formModalUpdate"
             :colorPattern="colorPattern">
         </ModalForm>
         <ModalMessage :message="message" ref="modalMessage"></ModalMessage>
         <ModalMessage :message="message" :deleteFunction="onDeletePattern" ref="modalDelete"></ModalMessage>
         <b-row>
-            <b-col cols="4" v-for="colorPattern in listOfPatterns" :value="colorPattern.id" :key="colorPattern.id">
-                <b-card style="max-width: 20rem;" v-bind:style="{ 'background-color': colorPattern.bg_color}">
+            <b-col sm="4" v-for="colorPattern in listOfPatterns" :value="colorPattern.id" :key="colorPattern.id">
+                <b-card v-bind:style="{ 'background-color': colorPattern.bg_color}">
                     <b-card-text>
                         <pre
                             v-bind:style="{ 'color': colorPattern.text_color}">Background Color: {{colorPattern.bg_color}}</pre>
@@ -23,6 +23,10 @@
                 </b-card>
             </b-col>
         </b-row>
+        <b-container class="d-flex justify-content-center">
+            <ModalForm title="Create New Calendar Pattern" :submit="onCreateColors" ref="formModalCreate" class="my-5">
+            </ModalForm>
+        </b-container>
     </b-container>
 </template>
 <script>

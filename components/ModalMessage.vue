@@ -6,6 +6,7 @@
                 <b-button type="submit" variant="danger" size="sm" class="float-center" @click="deleteFunction">
                     Delete</b-button>
             </div>
+            <div v-else></div>
         </template>
     </b-modal>
 </template>

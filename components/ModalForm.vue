@@ -46,11 +46,6 @@ export default {
 
     props: ['title', 'submit', 'colorPattern'],
 
-    created() {
-        if (this.colorPattern) {
-            console.log('entrou')
-        }
-    },
 }
 </script>
 
